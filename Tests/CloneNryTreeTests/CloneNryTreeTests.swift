@@ -28,6 +28,20 @@ final class CloneNryTreeTests: XCTestCase {
         let clone = node.cloneIterative()
         XCTAssertEqual(node.description, clone.description)
     }
+    func testCloneRecursionNodeAllDifferentFromOriginal() {
+        let node = makeSUT()
+        let set1 = collect(node)
+        let clone = node.cloneRecursion()
+        let set2 = collect(clone)
+        set1.forEach {
+             XCTAssertFalse(set2.contains($0))
+        }
+    }
+    func testCollectTurlyCollectAllNode() {
+        let node = makeSUT()
+        let set = collect(node)
+        XCTAssertEqual(set.count, 7)
+    }
     
     // MARK: - helper
     private func makeSUT() -> Node {
@@ -39,6 +53,18 @@ final class CloneNryTreeTests: XCTestCase {
         node.subs[1].addSubNode(Node(val: 6))
         node.subs[1].addSubNode(Node(val: 7))
         return node
+    }
+    
+    private func collect(_ node: Node) -> Set<ObjectIdentifier> {
+        var set = Set<ObjectIdentifier>()
+        func preorder(_ n: Node) {
+            set.insert(ObjectIdentifier(n))
+            for subn in n.subs {
+                preorder(subn)
+            }
+        }
+        preorder(node)
+        return set
     }
     
 }
