@@ -46,27 +46,3 @@ extension Node {
         return root
     }
 }
-
-class Node:CustomStringConvertible {
-    internal init(val: Int) {
-        self.val = val
-        self.subs = []
-        self.parent = nil
-    }
-    
-    var val: Int
-    private(set) var subs:[Node]
-    private(set) var parent:Node?
-    
-    func addSubNode(_ node: Node) {
-        subs.append(node)
-        node.parent = self
-    }
-
-    private func treeLines() -> [String] {
-        return [self.val.description] + self.subs.flatMap{$0.treeLines()}.map{"|   "+$0}
-    }
-    var description: String {
-        treeLines().joined(separator: "\n")
-    }
-}
