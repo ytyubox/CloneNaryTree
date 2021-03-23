@@ -1,14 +1,9 @@
 import XCTest
 
 final class CloneNryTreeTests: XCTestCase {
+  
     func testTreeDescription() {
-        let node = Node(val: 1)
-        node.subs.append(Node(val: 2))
-        node.subs.append(Node(val: 3))
-        node.subs[0].subs.append(Node(val: 4))
-        node.subs[0].subs.append(Node(val: 5))
-        node.subs[1].subs.append(Node(val: 6))
-        node.subs[1].subs.append(Node(val: 7))
+        let node = makeSUT()
         XCTAssertEqual(
             node.description,
             """
@@ -22,7 +17,23 @@ final class CloneNryTreeTests: XCTestCase {
             """
         )
     }
-   
+    func testCloneResucrsionHasSameDescription() {
+        let node = makeSUT()
+        let clone = node.cloneRecursion()
+        XCTAssertEqual(node.description, clone.description)
+    }
+    // MARK: - helper
+    private func makeSUT() -> Node {
+        let node = Node(val: 1)
+        node.subs.append(Node(val: 2))
+        node.subs.append(Node(val: 3))
+        node.subs[0].subs.append(Node(val: 4))
+        node.subs[0].subs.append(Node(val: 5))
+        node.subs[1].subs.append(Node(val: 6))
+        node.subs[1].subs.append(Node(val: 7))
+        return node
+    }
+    
 }
 extension Node {
     func cloneRecursion() -> Node {
