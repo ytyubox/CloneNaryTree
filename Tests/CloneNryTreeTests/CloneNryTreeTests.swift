@@ -22,15 +22,16 @@ final class CloneNryTreeTests: XCTestCase {
         let clone = node.cloneRecursion()
         XCTAssertEqual(node.description, clone.description)
     }
+   
     // MARK: - helper
     private func makeSUT() -> Node {
         let node = Node(val: 1)
-        node.subs.append(Node(val: 2))
-        node.subs.append(Node(val: 3))
-        node.subs[0].subs.append(Node(val: 4))
-        node.subs[0].subs.append(Node(val: 5))
-        node.subs[1].subs.append(Node(val: 6))
-        node.subs[1].subs.append(Node(val: 7))
+        node.addSubNode(Node(val: 2))
+        node.addSubNode(Node(val: 3))
+        node.subs[0].addSubNode(Node(val: 4))
+        node.subs[0].addSubNode(Node(val: 5))
+        node.subs[1].addSubNode(Node(val: 6))
+        node.subs[1].addSubNode(Node(val: 7))
         return node
     }
     
@@ -40,15 +41,11 @@ extension Node {
         let root = Node(val: self.val)
         for n in subs {
             let n2 = n.cloneRecursion()
-            root.subs.append(n2)
-            n2.parent = root
+            root.addSubNode(n2)
         }
         return root
     }
 }
-
-
-
 
 class Node:CustomStringConvertible {
     internal init(val: Int) {
@@ -58,8 +55,13 @@ class Node:CustomStringConvertible {
     }
     
     var val: Int
-    var subs:[Node]
-    var parent:Node?
+    private(set) var subs:[Node]
+    private(set) var parent:Node?
+    
+    func addSubNode(_ node: Node) {
+        subs.append(node)
+        node.parent = self
+    }
 
     private func treeLines() -> [String] {
         return [self.val.description] + self.subs.flatMap{$0.treeLines()}.map{"|   "+$0}
