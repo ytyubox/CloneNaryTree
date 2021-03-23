@@ -1,7 +1,7 @@
 import XCTest
 
 final class CloneNryTreeTests: XCTestCase {
-  
+    
     func testTreeDescription() {
         let node = makeSUT()
         XCTAssertEqual(
@@ -22,7 +22,13 @@ final class CloneNryTreeTests: XCTestCase {
         let clone = node.cloneRecursion()
         XCTAssertEqual(node.description, clone.description)
     }
-   
+    
+    func testCloneIterativeHasSameDescription() {
+        let node = makeSUT()
+        let clone = node.cloneIterative()
+        XCTAssertEqual(node.description, clone.description)
+    }
+    
     // MARK: - helper
     private func makeSUT() -> Node {
         let node = Node(val: 1)
@@ -42,6 +48,26 @@ extension Node {
         for n in subs {
             let n2 = n.cloneRecursion()
             root.addSubNode(n2)
+        }
+        return root
+    }
+    
+    func cloneIterative() -> Node {
+        let root = Node(val: val)
+        var clone:Node? = root
+        var original:Node? = self
+        
+        while true {
+            guard let o = original, let c = clone else {break}
+            if c.subs.count == o.subs.count {
+                original = original?.parent
+                clone = clone?.parent
+                continue
+            }
+            let o2 = o.subs[c.subs.count]
+            let c2 = Node(val: o2.val)
+            c.addSubNode(c2)
+            (original, clone) = (o2, c2)
         }
         return root
     }
