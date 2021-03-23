@@ -37,6 +37,15 @@ final class CloneNryTreeTests: XCTestCase {
              XCTAssertFalse(set2.contains($0))
         }
     }
+    func testCloneIterativeNodeAllDifferentFromOriginal() {
+        let node = makeSUT()
+        let set1 = collect(node)
+        let clone = node.cloneIterative()
+        let set2 = collect(clone)
+        set1.forEach {
+             XCTAssertFalse(set2.contains($0))
+        }
+    }
     func testCollectTurlyCollectAllNode() {
         let node = makeSUT()
         let set = collect(node)
