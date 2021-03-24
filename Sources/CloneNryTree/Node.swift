@@ -76,3 +76,16 @@ public extension Node {
         subs.removeAll(keepingCapacity: true)
     }
 }
+
+
+public class WeakNode:Node {
+    private weak var _parent:Node?
+    public override var parent: Node? {
+        get {
+            _parent
+        }
+        set {
+            _parent = newValue
+        }
+    }
+}

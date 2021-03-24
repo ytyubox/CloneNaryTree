@@ -69,6 +69,26 @@ final class CloneNryTreeTests: XCTestCase {
         XCTAssertNil(w2)
         XCTAssertNil(w3)
     }
+    func testWeakNodeWillReleaseEverySubnode() {
+        var node1:Node? = WeakNode(val: 0)
+        weak var w1 = node1
+        node1?.addSubNode(WeakNode(val: 1))
+        weak var w2 = node1?.subs[0]
+        w2?.addSubNode(WeakNode(val: 2))
+        weak var w3 = w2?.subs[0]
+        XCTAssertEqual(
+            node1?.description,
+            """
+            0
+            |   1
+            |   |   2
+            """
+            )
+        node1 = nil
+        XCTAssertNil(w1)
+        XCTAssertNil(w2)
+        XCTAssertNil(w3)
+    }
     
     // MARK: - helper
     private func makeSUT() -> Node {
