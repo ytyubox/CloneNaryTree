@@ -18,14 +18,14 @@ public class Node:CustomStringConvertible {
     }
     
     var val: Int
-    public private(set) var subs:[Node]
-    public private(set) var parent:Node?
+    public fileprivate(set) var subs:[Node]
+    public fileprivate(set) var parent:Node?
     
     public func addSubNode(_ node: Node) {
         subs.append(node)
         node.parent = self
     }
-
+    
     private func treeLines() -> [String] {
         return [self.val.description] + self.subs.flatMap{$0.treeLines()}.map{"|   "+$0}
     }
@@ -63,5 +63,16 @@ public extension Node {
             (original, clone) = (o2, c2)
         }
         return root
+    }
+}
+
+// MARK: - Destroy
+public extension Node {
+    func destroy() {
+        subs.forEach{
+            $0.destroy()
+        }
+        parent = nil
+        subs.removeAll(keepingCapacity: true)
     }
 }
